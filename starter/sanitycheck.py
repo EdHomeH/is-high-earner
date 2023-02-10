@@ -10,9 +10,10 @@ FAIL_COLOR = '\033[91m'
 OK_COLOR = '\033[92m'
 WARN_COLOR = '\033[93m'
 
+
 def run_sanity_check(test_dir):
 
-    #assert path.isdir(test_dir), FAIL_COLOR+f"No direcotry named {test_dir} found in {os.getcwd()}"
+    assert path.isdir(test_dir), FAIL_COLOR+f"No direcotry named {test_dir} found in {os.getcwd()}"
     print('This script will perform a sanity test to ensure your code meets the criteria in the rubric.\n')
     print('Please enter the path to the file that contains your test cases for the GET() and POST() methods')
     print('The path should be something like abc/def/test_xyz.py')
@@ -66,7 +67,6 @@ def run_sanity_check(test_dir):
             print(FAIL_COLOR+"Your test case for GET() does not seem to be testing the CONTENTS of the response.\n")
 
 
-
     ## POST() 
     TEST_FOR_POST_METHOD_RESPONSE_CODE = False
     TEST_FOR_POST_METHOD_RESPONSE_BODY = False
@@ -111,7 +111,6 @@ def run_sanity_check(test_dir):
             print(FAIL_COLOR+"You do not seem to have TWO separate test cases, one for each possible prediction that your model can make.")
 
 
-
     SANITY_TEST_PASSING = SANITY_TEST_PASSING and\
         TEST_FOR_GET_METHOD_RESPONSE_CODE and \
         TEST_FOR_GET_METHOD_RESPONSE_BODY and \
@@ -126,10 +125,8 @@ def run_sanity_check(test_dir):
     print(WARN_COLOR+"You should still check your work against the rubric to ensure you meet the criteria.")
 
 
-
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('test_dir',metavar='test_dir',nargs='?',default='tests',help='Name of the directory that has test files.')
     args = parser.parse_args()
     run_sanity_check(args.test_dir)
-
