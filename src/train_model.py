@@ -3,7 +3,7 @@ import pandas as pd
 from sklearn.model_selection import train_test_split
 
 from src.ml.data import process_data
-from src.ml.model import train_model, compute_model_metrics, inference, save_model
+from src.ml.model import train_model, compute_model_metrics, inference, save_model, model_slice_performance
 
 
 random_state=123
@@ -44,6 +44,9 @@ def main():
     print("fbeta: ", fbeta)
 
     save_model(trained_model, encoder, lb, output_model_path)
+    
+    for feature in cat_features:
+        model_slice_performance(trained_model, test, feature, cat_features, label, encoder, lb)
 
 
 

@@ -106,7 +106,7 @@ def load_model(path, return_encoder_and_lbl_binarizer=False):
     return pickle.load(open(path+'logistic.sav', 'rb')), pickle.load(open(path+'encoder.sav', 'rb')), pickle.load(open(path+'lb.sav', 'rb'))
 
 
-def model_slice_performance(model, test, feature_to_slice_on, cat_features, label, encoder, lb):
+def model_slice_performance(model, test, feature_to_slice_on, cat_features, label, encoder, lb, save_output=True):
     """generate performance metrics for every unique value in the feature to slice on
 
     Args:
@@ -119,7 +119,9 @@ def model_slice_performance(model, test, feature_to_slice_on, cat_features, labe
         lb (LabelBinarizer): the label binarizer
     """
     
-    print(f"Performance for {feature_to_slice_on}: ")
+    perf_dict = dict()
+    perf_dict[feature_to_slice_on] = dict() 
+    
     for cls in test[feature_to_slice_on].unique():
 
         X_test, y_test, _, _ = process_data(
@@ -128,8 +130,12 @@ def model_slice_performance(model, test, feature_to_slice_on, cat_features, labe
 
         precision, recall, fbeta = compute_model_metrics(y=y_test, preds=inference(model, X_test))
 
-        print(f"  {cls}:")
+        perf_dict[feature_to_slice_on][cls] = dict()
 
-        print("\tprecision: ", precision)
-        print("\trecall: ", recall)
-        print("\tfbeta: ", fbeta)
+        perf_dict[feature_to_slice_on][cls]["precision"]=precision
+        perf_dict[feature_to_slice_on][cls]["recall"]=recall
+        perf_dict[feature_to_slice_on][cls]["fbeta"]=fbeta
+    
+    if save_output:
+        with open(f"src/output/slice_output_{feature_to_slice_on}.txt", 'w') as f:
+            f.write(str(perf_dict))
