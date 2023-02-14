@@ -1,5 +1,6 @@
 from sklearn.metrics import fbeta_score, precision_score, recall_score
 from sklearn.linear_model import LogisticRegression
+import pickle
 
 
 # Optional: implement hyperparameter tuning.
@@ -54,7 +55,7 @@ def inference(model, X):
 
     Inputs
     ------
-    model : ???
+    model : LogisticRegression
         Trained machine learning model.
     X : np.array
         Data used for prediction.
@@ -65,3 +66,30 @@ def inference(model, X):
     """
     
     return model.predict(X)
+
+
+def save_model(model, path):
+    """ Save the model as a pickel file
+
+    Args:
+        model : LogisticRegression
+            Trained machine learning model
+        path : str
+            Path to save the model
+    """
+
+    pickle.dump(model, open(path, 'wb'))
+
+
+def load_model(path):
+    """ Load the model from a pickle file
+
+    Args:
+        path : str
+            Path where the model is saved
+
+    Returns:
+        A LogisticRegression model
+    """
+
+    return pickle.load(open(path, 'rb'))
