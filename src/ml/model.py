@@ -68,28 +68,37 @@ def inference(model, X):
     return model.predict(X)
 
 
-def save_model(model, path):
+def save_model(model, encoder, lb, path):
     """ Save the model as a pickel file
 
     Args:
         model : LogisticRegression
             Trained machine learning model
+        encoder: 
+            procesed encoder
+        lb:
+            label binarizer
         path : str
             Path to save the model
     """
 
-    pickle.dump(model, open(path, 'wb'))
+    pickle.dump(model, open(path+'logistic.sav', 'wb'))
+    pickle.dump(encoder, open(path+'encoder.sav', 'wb'))
+    pickle.dump(lb, open(path+'lb.sav', 'wb'))
 
 
-def load_model(path):
-    """ Load the model from a pickle file
+def load_model(path, return_encoder_and_lbl_binarizer=False):
+    """ Load the model and the encoder if indicated from pickle files
 
     Args:
         path : str
-            Path where the model is saved
+            Path where the model and encoder are saved
+        return_encoder : bool
+            indicator to have the encoder also returned
 
     Returns:
-        A LogisticRegression model
+        A LogisticRegression model | (LogisticRegression model, encoder)
     """
-
-    return pickle.load(open(path, 'rb'))
+    if not return_encoder_and_lbl_binarizer:
+        return pickle.load(open(path+'logistic.sav', 'rb'))
+    return pickle.load(open(path+'logistic.sav', 'rb')), pickle.load(open(path+'encoder.sav', 'rb')), pickle.load(open(path+'lb.sav', 'rb'))

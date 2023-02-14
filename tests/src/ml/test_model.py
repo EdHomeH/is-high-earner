@@ -21,35 +21,27 @@ def test_train_model_type(data):
 
 def test_inference(data):
 
-    train, test = train_test_split(data, test_size=0.20, random_state=random_state)
+    _, test = train_test_split(data, test_size=0.20, random_state=random_state)
 
-    _, _, encoder, lb = process_data(
-        train, categorical_features=cat_features, label=label, training=True
-    )
+    trained_model, encoder, lb = load_model('src/output/', return_encoder_and_lbl_binarizer=True)
 
     X_test, _, _, _ = process_data(
         test, categorical_features=cat_features, label=label, training=False, encoder=encoder, lb=lb
     )
-    
-    trained_model = load_model('src/output/logistic.sav')
 
     assert inference(trained_model, X_test[:1]) == [0]
  
 
 def test_compute_model_metrics(data):
 
-    train, test = train_test_split(data, test_size=0.20, random_state=random_state)
+    _, test = train_test_split(data, test_size=0.20, random_state=random_state)
 
-    _, _, encoder, lb = process_data(
-        train, categorical_features=cat_features, label=label, training=True
-    )
+    trained_model, encoder, lb = load_model('src/output/', return_encoder_and_lbl_binarizer=True)
 
     X_test, y_test, _, _ = process_data(
         test, categorical_features=cat_features, label=label, training=False, encoder=encoder, lb=lb
     )
 
-    trained_model = load_model('src/output/logistic.sav')
-    
     precision, recall, fbeta = compute_model_metrics(y=y_test[:1], preds=inference(trained_model, X_test[:1]))
     
     assert precision == 1.0

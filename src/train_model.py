@@ -9,7 +9,7 @@ from src.ml.model import train_model, compute_model_metrics, inference, save_mod
 random_state=123
 
 data_path = 'data/census.csv'
-output_model_path = 'src/output/logistic.sav'
+output_model_path = 'src/output/'
 
 cat_features = [
     "workclass",
@@ -43,7 +43,7 @@ def main():
     print("recall: ", recall)
     print("fbeta: ", fbeta)
 
-    save_model(trained_model, output_model_path)
+    save_model(trained_model, encoder, lb, output_model_path)
 
 
 
