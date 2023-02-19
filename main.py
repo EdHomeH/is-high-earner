@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 import pandas as pd
 
 from src.ml.model import load_model, inference
@@ -12,16 +12,16 @@ class User(BaseModel):
     workclass: str
     fnlght: int
     education: str
-    education_num: int
-    marital_status: str
+    education_num: int = Field(alias = 'education-num')
+    marital_status: str = Field(alias = 'marital-status')
     occupation: str
     relationship: str
     race: str
     sex: str
-    capital_gain: int
-    capital_loss: int
-    hours_per_week: int
-    native_country: str
+    capital_gain: int = Field(alias = 'capital-gain')
+    capital_loss: int = Field(alias = 'capital-loss')
+    hours_per_week: int = Field(alias = 'hours-per-week')
+    native_country: str = Field(alias = 'native-country')
 
     class Config:
         schema_extra = {
@@ -30,16 +30,16 @@ class User(BaseModel):
                 "workclass": "State-gov",
                 "fnlght": 77516,
                 "education": "Bachelors",
-                "education_num": 13,
-                "marital_status": "Never-married",
+                "education-num": 13,
+                "marital-status": "Never-married",
                 "occupation": "Adm-clerical",
                 "relationship": "Not-in-family",
                 "race": "White",
                 "sex": "Male",
-                "capital_gain": 2174,
-                "capital_loss": 0,
-                "hours_per_week": 40,
-                "native_country": "United-States"
+                "capital-gain": 2174,
+                "capital-loss": 0,
+                "hours-per-week": 40,
+                "native-country": "United-States"
             }
         }
 
@@ -57,9 +57,7 @@ async def is_high_earner(user: User):
 
     model, encoder, lb = load_model(output_model_path, return_encoder_and_lbl_binarizer=True)
     
-    user_df = pd.DataFrame([user.__dict__])
-    # change '_' for '-' in column names
-    user_df.columns = [c.replace('_','-') for c in user_df.columns]
+    user_df = pd.DataFrame([user.dict(by_alias=True)])
 
     X_test, _, _, _ = process_data(
         user_df, categorical_features=cat_features, label=None, training=False, encoder=encoder, lb=lb
