@@ -10,7 +10,7 @@ client = TestClient(app)
 def test_get_success():
     r = client.get("/")
     assert r.status_code == 200
-    assert r.content == b'"Hello!"'
+    assert r.json() == "Hello!"
 
     
 def test_get_fail():
@@ -23,10 +23,10 @@ def test_post_fail():
     r = client.post("/predict/", content=json.dumps(data))
     assert r.status_code == 422
 
+
 def test_post_success():
     data = User.Config.schema_extra['example']
     
     r = client.post("/predict/", content=json.dumps(data))
     assert r.status_code == 200
-    assert r.content == b'false'
-
+    assert r.json() == False
