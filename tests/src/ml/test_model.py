@@ -30,6 +30,7 @@ def test_inference(data):
     )
 
     assert inference(trained_model, X_test[:1]) == [0]
+    assert inference(trained_model, X_test[15:16]) == [1]
  
 
 def test_compute_model_metrics(data):
