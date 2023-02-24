@@ -27,5 +27,7 @@ response = requests.post('https://is-high-earner.onrender.com/predict/', headers
 
 if response:
     print("yes!!")
+    print(f"status_code: {response.status_code}")
+    print(f"is high earner prediction: {response.json()}")
 else:
     print("no response... :(")
